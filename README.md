@@ -23,13 +23,16 @@ Local personal files are ignored by git:
 - `approved.txt` — truthful extra skills the tool may add
 - `tailored.tex` — generated LaTeX output
 - `tailored.pdf` — generated PDF output
+- `tailored.diff` — exact LaTeX diff
+- `suggestions.txt` — safe bullet suggestions only
 
 Fast path:
 
 ```bash
 python3 -m resume_tailor paste
 # paste JD, then press Ctrl-D
-# writes tailored.tex and tailored.pdf
+# writes tailored.tex, tailored.pdf, tailored.diff, suggestions.txt
+# opens tailored.pdf automatically
 ```
 
 File path:
