@@ -12,5 +12,6 @@ __pycache__/
 # local personal resume/job inputs; examples/ stays tracked
 /resume.tex
 /tailored.tex
+/tailored.pdf
 /job.txt
 /approved.txt

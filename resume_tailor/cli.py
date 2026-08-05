@@ -7,7 +7,8 @@ from pathlib import Path
 
 from .keywords import extract_terms
 from .latex import sections
-from .tailor import tailor
+from .pdf import compile_pdf
+from .tailor import bullet_suggestions, tailor
 
 
 def _read(path: str | None) -> str:
@@ -38,14 +39,27 @@ def cmd_tailor(args: argparse.Namespace) -> int:
     approved = approved_path.read_text() if approved_path.exists() else ""
     result = tailor(resume_tex, job_text, approved)
 
-    if args.out:
-        Path(args.out).expanduser().write_text(result.tex)
+    out = Path(args.out).expanduser()
+    out.write_text(result.tex)
     print(json.dumps({"job_terms": result.job_terms, "resume_terms": result.resume_terms, "additions": result.additions}, indent=2))
     if result.diff:
         print("\n--- diff ---")
         print(result.diff, end="")
     else:
-        print("\nNo safe edits made. Add an --approved profile if the missing terms are truthful.")
+        print("\nNo safe skills edits made. Add an --approved profile if the missing terms are truthful.")
+
+    suggestions = bullet_suggestions(job_text, result.tex)
+    if suggestions:
+        print("\n--- safe bullet suggestions ---")
+        for item in suggestions:
+            print(f"- {item}")
+
+    if args.pdf:
+        pdf = compile_pdf(out, Path(args.pdf))
+        page_text = "unknown" if pdf.pages is None else str(pdf.pages)
+        print(f"\nPDF: {pdf.pdf} ({page_text} page{'s' if pdf.pages != 1 else ''}, {pdf.engine})")
+        if pdf.pages and pdf.pages > 1:
+            print("WARNING: PDF is over one page.")
     return 0
 
 
@@ -65,8 +79,16 @@ def main(argv: list[str] | None = None) -> int:
     tailor_p.add_argument("--resume", default="resume.tex")
     tailor_p.add_argument("--job", default="job.txt")
     tailor_p.add_argument("--out", default="tailored.tex")
+    tailor_p.add_argument("--pdf", default="tailored.pdf", help="compiled PDF output; pass empty string to skip")
     tailor_p.add_argument("--approved", help="optional text file of truthful extra skills")
     tailor_p.set_defaults(func=cmd_tailor)
+
+    paste_p = sub.add_parser("paste", help="paste a JD in the terminal and output tailored.pdf")
+    paste_p.add_argument("--resume", default="resume.tex")
+    paste_p.add_argument("--out", default="tailored.tex")
+    paste_p.add_argument("--pdf", default="tailored.pdf")
+    paste_p.add_argument("--approved", help="optional text file of truthful extra skills")
+    paste_p.set_defaults(func=cmd_tailor, job="-")
 
     args = parser.parse_args(argv)
     return args.func(args)

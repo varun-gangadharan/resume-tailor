@@ -21,9 +21,18 @@ Local personal files are ignored by git:
 - `resume.tex` — your real LaTeX resume
 - `job.txt` — pasted job description
 - `approved.txt` — truthful extra skills the tool may add
-- `tailored.tex` — generated output
+- `tailored.tex` — generated LaTeX output
+- `tailored.pdf` — generated PDF output
 
 Fast path:
+
+```bash
+python3 -m resume_tailor paste
+# paste JD, then press Ctrl-D
+# writes tailored.tex and tailored.pdf
+```
+
+File path:
 
 ```bash
 pbpaste > job.txt
@@ -52,5 +61,5 @@ python3 tests/run.py
 ## Current limits
 
 - Edits the Technical Skills block only.
-- Does not rewrite bullets yet.
-- Does not compile PDFs yet.
+- Bullet edits are suggestions only.
+- PDF compile uses Tectonic; it strips pdfTeX-only ATS lines from the temporary compile copy only.

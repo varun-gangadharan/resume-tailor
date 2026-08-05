@@ -54,3 +54,13 @@ def tailor(resume_tex: str, job_text: str, approved_text: str = "") -> TailorRes
 def missing_job_terms(job_text: str, resume_tex: str) -> list[str]:
     keyword_report = report(job_text, resume_tex)
     return sorted(flatten(keyword_report.job_terms) - flatten(keyword_report.resume_terms))
+
+
+def bullet_suggestions(job_text: str, resume_tex: str) -> list[str]:
+    missing = missing_job_terms(job_text, resume_tex)
+    if not missing:
+        return []
+    return [
+        f"If truthful, weave '{term}' into an existing relevant bullet; do not add a new bullet just for ATS."
+        for term in missing
+    ]

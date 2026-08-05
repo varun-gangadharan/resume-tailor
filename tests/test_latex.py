@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from resume_tailor.latex import parse_skills, sections, update_skills
-from resume_tailor.tailor import tailor
+from resume_tailor.tailor import bullet_suggestions, tailor
 
 ROOT = Path(__file__).resolve().parents[1]
 RESUME = (ROOT / "examples" / "current_resume.tex").read_text()
@@ -31,3 +31,8 @@ def test_tailor_adds_only_truthful_approved_terms():
     assert result.additions == {"Tech": ["REST", "CI/CD", "PostgreSQL"]}
     assert "Redis" not in result.tex
     assert result.tex.count("\\resumeItem{") == RESUME.count("\\resumeItem{")
+
+
+def test_bullet_suggestions_are_advisory_only():
+    suggestions = bullet_suggestions("Redis GraphQL", RESUME)
+    assert suggestions == ["If truthful, weave 'Redis' into an existing relevant bullet; do not add a new bullet just for ATS."]
