@@ -64,6 +64,18 @@ python3 -m resume_tailor.ui
 
 Then paste a JD in the browser and click `Tailor Resume → PDF`.
 
+## Clickable Mac app
+
+Build/install once:
+
+```bash
+cd ~/resume-tailor
+python3 scripts/build_mac_app.py
+open "$HOME/Applications/Resume Tailor.app"
+```
+
+You can drag `$HOME/Applications/Resume Tailor.app` to the Dock. It launches the local browser UI.
+
 ## Test
 
 ```bash

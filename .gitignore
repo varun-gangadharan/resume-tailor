@@ -15,5 +15,8 @@ __pycache__/
 /tailored.pdf
 /tailored.diff
 /suggestions.txt
+/dist/
+node_modules/
+.mcp.json
 /job.txt
 /approved.txt

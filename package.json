@@ -1,0 +1,28 @@
+{
+  "name": "resume-tailor",
+  "version": "1.0.0",
+  "description": "Local tool for tailoring a one-page LaTeX SWE resume to a pasted job description.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "test": "tests"
+  },
+  "scripts": {
+    "test:e2e": "node tests/e2e/playwright-ui.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/varun-gangadharan/resume-tailor.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/varun-gangadharan/resume-tailor/issues"
+  },
+  "homepage": "https://github.com/varun-gangadharan/resume-tailor#readme",
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}

@@ -151,8 +151,13 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main() -> int:
-    server = ThreadingHTTPServer(("127.0.0.1", 8765), Handler)
     url = "http://127.0.0.1:8765"
+    try:
+        server = ThreadingHTTPServer(("127.0.0.1", 8765), Handler)
+    except OSError:
+        print(f"Resume Tailor already running at {url}")
+        webbrowser.open(url)
+        return 0
     print(f"Resume Tailor running at {url}")
     webbrowser.open(url)
     server.serve_forever()

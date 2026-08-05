@@ -22,13 +22,19 @@ You can keep it on Desktop or drag it to the Dock. This opens Terminal and launc
 
 ## Option 2 — Real `.app` wrapper, better Mac feel
 
-Use `osacompile` to make `Resume Tailor.app`:
+Implemented with:
 
-```applescript
-do shell script "cd ~/resume-tailor && /usr/bin/python3 -m resume_tailor.ui"
+```bash
+python3 scripts/build_mac_app.py
+open "$HOME/Applications/Resume Tailor.app"
 ```
 
-Then drag `Resume Tailor.app` to Applications/Dock. This is still local; it just launches the same Python server.
+The builder writes both:
+
+- `dist/Resume Tailor.app`
+- `$HOME/Applications/Resume Tailor.app`
+
+Drag `$HOME/Applications/Resume Tailor.app` to the Dock. This is still local; it just launches the same Python server.
 
 ## Option 3 — Menu bar/native app, defer
 
