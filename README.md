@@ -55,6 +55,15 @@ python3 -m resume_tailor tailor \
 
 `--approved` is optional. If omitted, the CLI uses `approved.txt` when it exists.
 
+## Local browser UI
+
+```bash
+cd ~/resume-tailor
+python3 -m resume_tailor.ui
+```
+
+Then paste a JD in the browser and click `Tailor Resume → PDF`.
+
 ## Test
 
 ```bash

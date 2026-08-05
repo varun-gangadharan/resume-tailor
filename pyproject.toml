@@ -11,3 +11,4 @@ requires-python = ">=3.11"
 
 [project.scripts]
 resume-tailor = "resume_tailor.cli:main"
+resume-tailor-ui = "resume_tailor.ui:main"

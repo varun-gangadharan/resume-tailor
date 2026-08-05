@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 failures = 0
-for module_name in ["tests.test_keywords", "tests.test_latex"]:
+for module_name in ["tests.test_keywords", "tests.test_latex", "tests.test_ui"]:
     module = importlib.import_module(module_name)
     for name, func in inspect.getmembers(module, inspect.isfunction):
         if not name.startswith("test_"):
