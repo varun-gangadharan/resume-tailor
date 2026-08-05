@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 from .keywords import extract_terms
@@ -10,9 +11,12 @@ from .tailor import tailor
 
 
 def _read(path: str | None) -> str:
-    if not path or path == "-":
-        return input("Paste job description, then press Enter:\n")
-    return Path(path).expanduser().read_text()
+    if path and path != "-":
+        return Path(path).expanduser().read_text()
+    if not sys.stdin.isatty():
+        return sys.stdin.read()
+    print("Paste job description, then press Ctrl-D:", file=sys.stderr)
+    return sys.stdin.read()
 
 
 def cmd_inspect(args: argparse.Namespace) -> int:
@@ -30,7 +34,8 @@ def cmd_tailor(args: argparse.Namespace) -> int:
     resume_path = Path(args.resume).expanduser()
     resume_tex = resume_path.read_text()
     job_text = _read(args.job)
-    approved = Path(args.approved).expanduser().read_text() if args.approved else ""
+    approved_path = Path(args.approved).expanduser() if args.approved else Path("approved.txt")
+    approved = approved_path.read_text() if approved_path.exists() else ""
     result = tailor(resume_tex, job_text, approved)
 
     if args.out:
@@ -49,17 +54,17 @@ def main(argv: list[str] | None = None) -> int:
     sub = parser.add_subparsers(required=True)
 
     inspect_p = sub.add_parser("inspect")
-    inspect_p.add_argument("--resume", required=True)
+    inspect_p.add_argument("--resume", default="resume.tex")
     inspect_p.set_defaults(func=cmd_inspect)
 
     keywords_p = sub.add_parser("keywords")
-    keywords_p.add_argument("--job", required=True, help="job description text file")
+    keywords_p.add_argument("--job", default="job.txt", help="job description text file")
     keywords_p.set_defaults(func=cmd_keywords)
 
     tailor_p = sub.add_parser("tailor")
-    tailor_p.add_argument("--resume", required=True)
-    tailor_p.add_argument("--job", required=True)
-    tailor_p.add_argument("--out")
+    tailor_p.add_argument("--resume", default="resume.tex")
+    tailor_p.add_argument("--job", default="job.txt")
+    tailor_p.add_argument("--out", default="tailored.tex")
     tailor_p.add_argument("--approved", help="optional text file of truthful extra skills")
     tailor_p.set_defaults(func=cmd_tailor)
 

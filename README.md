@@ -16,9 +16,24 @@ Keep the resume truthful and structurally stable while improving keyword match.
 
 ## CLI
 
+Local personal files are ignored by git:
+
+- `resume.tex` — your real LaTeX resume
+- `job.txt` — pasted job description
+- `approved.txt` — truthful extra skills the tool may add
+- `tailored.tex` — generated output
+
+Fast path:
+
 ```bash
-python3 -m resume_tailor inspect --resume examples/current_resume.tex
-python3 -m resume_tailor keywords --job examples/job.txt
+pbpaste > job.txt
+python3 -m resume_tailor inspect
+python3 -m resume_tailor tailor
+```
+
+Explicit example path:
+
+```bash
 python3 -m resume_tailor tailor \
   --resume examples/current_resume.tex \
   --job examples/job.txt \
@@ -26,7 +41,7 @@ python3 -m resume_tailor tailor \
   --out tailored.tex
 ```
 
-`--approved` is optional. Use it for truthful extra skills that are not already in the resume text.
+`--approved` is optional. If omitted, the CLI uses `approved.txt` when it exists.
 
 ## Test
 

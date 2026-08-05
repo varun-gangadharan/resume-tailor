@@ -8,3 +8,9 @@ __pycache__/
 *.fls
 *.fdb_latexmk
 *.synctex.gz
+
+# local personal resume/job inputs; examples/ stays tracked
+/resume.tex
+/tailored.tex
+/job.txt
+/approved.txt
