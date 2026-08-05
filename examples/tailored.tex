@@ -1,0 +1,47 @@
+\documentclass[letterpaper,11pt]{article}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\titleformat{\section}{\vspace{-4pt}\scshape\raggedright\large}{}{0em}{}[\vspace{-5pt}]
+\pdfgentounicode=1
+\newcommand{\resumeItem}[1]{\item\small{{#1 \vspace{-2pt}}}}
+\newcommand{\resumeSubheading}[4]{\vspace{-2pt}\item\begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}\textbf{#1} & #2 \\ \textit{\small#3} & \textit{\small #4} \\ \end{tabular*}\vspace{-7pt}}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+\begin{document}
+\begin{center}\textbf{\Huge \scshape Varun Gangadharan}\end{center}
+
+\section{Technical Skills}
+\begin{itemize}[leftmargin=0.10in, label={}, topsep=2pt, itemsep=0pt]
+\small{\item{
+\textbf{Languages:} Go, Python, JavaScript/TypeScript, C++, Java, C, SQL, Bash \\
+\textbf{Tech:} HashiCorp Vault, Kubernetes, Docker, React, Node.js, Django, AWS, Azure DevOps, Git, REST, CI/CD, PostgreSQL
+}}
+\end{itemize}
+
+\section{Experience}
+\resumeSubHeadingListStart
+\resumeSubheading
+{Software Engineer I}{Jul. 2024 -- Present}
+{\textbf{GEICO} $|$ TypeScript, React, Go, HashiCorp Vault, Kubernetes, Azure DevOps}{Chevy Chase, MD}
+\resumeItemListStart
+\resumeItem{\textbf{Built and scaled SecretShare} as a large-scale full-stack product in React/TypeScript and Go, with sensitive data handling, end-to-end auditability, and high integrity guarantees across 4,000+ GEICO engineers.}
+\resumeItem{Designed AI-augmented developer tooling with an MCP-compatible interface, critically evaluating AI-generated outputs for correctness and security risks before shipping to production LLM workflows.}
+\resumeItem{Engineered backend services in Go with JWT/OIDC auth, token caching, response wrapping, and least-privilege access.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+
+\section{Education}
+\section{Projects}
+\end{document}

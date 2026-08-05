@@ -1,0 +1,1 @@
+Software Engineer role building backend services and full-stack developer tools. Required: Python, Go, TypeScript, React, AWS, Docker, Kubernetes, PostgreSQL, REST APIs, JWT/OIDC authentication, CI/CD, and experience with LLM developer workflows.

@@ -14,17 +14,28 @@ Keep the resume truthful and structurally stable while improving keyword match.
 - Preserve one-page output.
 - Show a diff before the user accepts changes.
 
-## Planned CLI
+## CLI
 
 ```bash
-resume-tailor tailor --resume ~/Desktop/current_resume.tex --job job.txt --out tailored.tex
-resume-tailor diff --before resume.tex --after tailored.tex
+python3 -m resume_tailor inspect --resume examples/current_resume.tex
+python3 -m resume_tailor keywords --job examples/job.txt
+python3 -m resume_tailor tailor \
+  --resume examples/current_resume.tex \
+  --job examples/job.txt \
+  --approved examples/approved.txt \
+  --out tailored.tex
 ```
 
-## Build phases
+`--approved` is optional. Use it for truthful extra skills that are not already in the resume text.
 
-1. Inspect the Desktop and Downloads resume LaTeX files.
-2. Detect resume sections and existing technology claims.
-3. Extract SWE keywords from a job description.
-4. Apply safe LaTeX edits to skills and existing bullets.
-5. Validate with tests, diff output, and optional PDF compile/page count.
+## Test
+
+```bash
+python3 tests/run.py
+```
+
+## Current limits
+
+- Edits the Technical Skills block only.
+- Does not rewrite bullets yet.
+- Does not compile PDFs yet.

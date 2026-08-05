@@ -1,0 +1,33 @@
+from pathlib import Path
+
+from resume_tailor.latex import parse_skills, sections, update_skills
+from resume_tailor.tailor import tailor
+
+ROOT = Path(__file__).resolve().parents[1]
+RESUME = (ROOT / "examples" / "current_resume.tex").read_text()
+JOB = (ROOT / "examples" / "job.txt").read_text()
+APPROVED = (ROOT / "examples" / "approved.txt").read_text()
+
+
+def test_detects_sections():
+    assert sections(RESUME) == ["Technical Skills", "Experience", "Education", "Projects"]
+
+
+def test_parse_skills():
+    skills = parse_skills(RESUME)
+    assert "Go" in skills["Languages"]
+    assert "Docker" in skills["Tech"]
+
+
+def test_update_skills_only_changes_skills_block():
+    updated = update_skills(RESUME, {"Tech": ["PostgreSQL", "CI/CD"]})
+    assert "PostgreSQL" in updated
+    assert updated.count("\\resumeItem{") == RESUME.count("\\resumeItem{")
+    assert updated.count("\\section{") == RESUME.count("\\section{")
+
+
+def test_tailor_adds_only_truthful_approved_terms():
+    result = tailor(RESUME, JOB, APPROVED)
+    assert result.additions == {"Tech": ["REST", "CI/CD", "PostgreSQL"]}
+    assert "Redis" not in result.tex
+    assert result.tex.count("\\resumeItem{") == RESUME.count("\\resumeItem{")
