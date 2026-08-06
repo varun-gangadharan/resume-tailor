@@ -8,6 +8,7 @@ SKILLS_RE = re.compile(
     re.S,
 )
 LINE_RE = re.compile(r"\\textbf\{(?P<name>[^:]+):\}\s*(?P<values>.*?)(?:\\\\)?\s*$")
+ITEM_RE = re.compile(r"\\resumeItem\{(?P<body>.*?)\}", re.S)
 
 
 def sections(tex: str) -> list[str]:
@@ -60,3 +61,21 @@ def update_skills(tex: str, additions: dict[str, list[str]]) -> str:
         new_lines.append(f"\\textbf{{{name}:}} {', '.join(values)}{slash}")
 
     return tex[: match.start("body")] + "\n".join(new_lines) + tex[match.end("body") :]
+
+
+def update_bullet_tech(tex: str, job_terms: set[str]) -> str:
+    if "REST" not in job_terms:
+        return tex
+
+    def replace(match: re.Match[str]) -> str:
+        body = match.group("body")
+        if "REST API" in body or "REST APIs" in body:
+            return match.group(0)
+        updated = re.sub(r"\bAPI backend\b", "REST API backend", body, count=1)
+        updated = re.sub(r"\bAPI requests\b", "REST API requests", updated, count=1)
+        updated = re.sub(r"\bAPIs\b", "REST APIs", updated, count=1)
+        if updated == body:
+            updated = re.sub(r"\bAPI\b", "REST API", updated, count=1)
+        return f"\\resumeItem{{{updated}}}"
+
+    return ITEM_RE.sub(replace, tex)

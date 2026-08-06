@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from resume_tailor.latex import parse_skills, sections, update_skills
+from resume_tailor.latex import parse_skills, sections, update_bullet_tech, update_skills
 from resume_tailor.tailor import bullet_suggestions, tailor
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,6 +31,13 @@ def test_tailor_adds_only_truthful_approved_terms():
     assert result.additions == {"Tech": ["REST", "CI/CD", "PostgreSQL"]}
     assert "Redis" not in result.tex
     assert result.tex.count("\\resumeItem{") == RESUME.count("\\resumeItem{")
+
+
+def test_update_bullet_tech_keeps_action_same():
+    tex = r"\resumeItem{Modernized a legacy API backend, improving response time by 26\%.}"
+    updated = update_bullet_tech(tex, {"REST"})
+    assert "Modernized a legacy REST API backend" in updated
+    assert updated.count("\\resumeItem{") == 1
 
 
 def test_bullet_suggestions_are_advisory_only():

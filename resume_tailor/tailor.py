@@ -4,7 +4,7 @@ import difflib
 from dataclasses import dataclass
 
 from .keywords import flatten, report
-from .latex import parse_skills, update_skills
+from .latex import parse_skills, update_bullet_tech, update_skills
 
 
 @dataclass(frozen=True)
@@ -34,6 +34,7 @@ def tailor(resume_tex: str, job_text: str, approved_text: str = "") -> TailorRes
                 present.add(term.lower())
 
     tailored = update_skills(resume_tex, additions)
+    tailored = update_bullet_tech(tailored, flatten(keyword_report.job_terms))
     diff = "".join(
         difflib.unified_diff(
             resume_tex.splitlines(keepends=True),
