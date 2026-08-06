@@ -7,8 +7,8 @@ from dataclasses import dataclass
 TERMS: dict[str, list[str]] = {
     "Languages": ["Go", "Python", "JavaScript", "TypeScript", "C++", "Java", "C", "SQL", "Bash"],
     "Frontend": ["React", "Next.js", "HTML", "CSS"],
-    "Backend": ["Node.js", "Django", "REST", "API", "Microservices"],
-    "Cloud/DevOps": ["AWS", "Azure", "Azure DevOps", "Docker", "Kubernetes", "CI/CD", "Git"],
+    "Backend": ["Node.js", "Django", "REST", "API", "gRPC", "GraphQL", "Microservices", "Distributed Systems"],
+    "Cloud/DevOps": ["AWS", "Azure", "Azure DevOps", "Docker", "Kubernetes", "CI/CD", "Git", "Terraform", "Observability", "Automation", "Linux", "Networking"],
     "Data": ["PostgreSQL", "MongoDB", "Supabase", "Redis"],
     "Security": ["OIDC", "JWT", "HashiCorp Vault", "Secrets", "Audit", "Compliance"],
     "AI": ["LLM", "MCP", "AI"],
@@ -22,6 +22,20 @@ ALIASES = {
     "Vault": "HashiCorp Vault",
     "Postgres": "PostgreSQL",
     "GenAI": "AI",
+    "distributed architecture": "Distributed Systems",
+    "distributed backend systems": "Distributed Systems",
+    "distributed systems": "Distributed Systems",
+    "REST/JSON": "REST",
+    "micro-service": "Microservices",
+    "microservice": "Microservices",
+    "containerized": "Docker",
+    "observability platforms": "Observability",
+    "monitoring": "Observability",
+    "infrastructure-as-code": "Terraform",
+    "infra-as-code": "Terraform",
+    "automating infrastructure": "Automation",
+    "infrastructure automation": "Automation",
+    "TCP/IP": "Networking",
 }
 
 

@@ -9,7 +9,7 @@ Keep the resume truthful and structurally stable while improving keyword match.
 ## Guardrails
 
 - Do not invent experience.
-- Prefer editing skills and existing technology phrasing.
+- Prefer editing skills and existing technology phrasing in bullets.
 - Keep bullet count unchanged unless explicitly approved.
 - Preserve one-page output.
 - Show a diff before the user accepts changes.
@@ -90,6 +90,7 @@ python3 tests/run.py
 
 ## Current limits
 
-- Edits the Technical Skills block only.
-- Bullet edits are suggestions only.
+- Edits the Technical Skills block.
+- Safely updates bullet technology phrasing when the underlying work stays the same, e.g. `APIs` → `REST APIs`, `backend services in Go` → `Kubernetes-backed backend services in Go` only when those technologies already appear in your resume.
+- Bullet edits that would add new claims remain suggestions only.
 - PDF compile uses Tectonic; it strips pdfTeX-only ATS lines from the temporary compile copy only.

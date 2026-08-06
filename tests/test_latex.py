@@ -42,4 +42,5 @@ def test_update_bullet_tech_keeps_action_same():
 
 def test_bullet_suggestions_are_advisory_only():
     suggestions = bullet_suggestions("Redis GraphQL", RESUME)
-    assert suggestions == ["If truthful, weave 'Redis' into an existing relevant bullet; do not add a new bullet just for ATS."]
+    assert "If truthful, weave 'GraphQL' into an existing relevant bullet; do not add a new bullet just for ATS." in suggestions
+    assert "If truthful, weave 'Redis' into an existing relevant bullet; do not add a new bullet just for ATS." in suggestions
