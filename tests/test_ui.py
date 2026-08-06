@@ -1,4 +1,5 @@
-from resume_tailor.ui import UiResult, form, result_page
+from resume_tailor.library import SavedResume
+from resume_tailor.ui import UiResult, form, matches_page, result_page
 
 
 def test_form_mentions_local_privacy():
@@ -10,3 +11,11 @@ def test_result_page_links_outputs():
     assert b"Open PDF" in page
     assert b"tailored.diff" in page
     assert b"Redis" in page
+    assert b"Save to Library" in page
+
+
+def test_matches_page_shows_existing_resume():
+    page = matches_page([SavedResume(1, "Backend", "backend", "library/resumes/backend/resume.pdf", 0.75, ("Go",), ("Redis",))], "Go Redis")
+    assert b"Backend" in page
+    assert b"75%" in page
+    assert b"Generate New PDF Instead" in page

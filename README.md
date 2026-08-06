@@ -25,6 +25,7 @@ Local personal files are ignored by git:
 - `tailored.pdf` — generated PDF output
 - `tailored.diff` — exact LaTeX diff
 - `suggestions.txt` — safe bullet suggestions only
+- `library/` — local SQLite DB plus saved resume folders
 
 Fast path:
 
@@ -62,7 +63,12 @@ cd ~/resume-tailor
 python3 -m resume_tailor.ui
 ```
 
-Then paste a JD in the browser and click `Tailor Resume → PDF`.
+Then paste a JD in the browser and either:
+
+- click `Find Existing Resume` to search your saved local library
+- click `Generate New PDF` to tailor a new one
+
+Generated resumes can be saved to the library with a name like `backend-go-vault`.
 
 ## Clickable Mac app
 
