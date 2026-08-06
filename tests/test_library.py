@@ -2,13 +2,17 @@ from pathlib import Path
 from shutil import copyfile
 from tempfile import TemporaryDirectory
 
-from resume_tailor.library import ResumeLibrary, slugify
+from resume_tailor.library import ResumeLibrary, slugify, suggested_name
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_slugify():
     assert slugify("Backend Go / Vault") == "backend-go-vault"
+
+
+def test_suggested_name_uses_keywords():
+    assert suggested_name("Go Kubernetes AWS backend") == "kubernetes-aws-go"
 
 
 def test_save_and_match_resume_library():
@@ -21,8 +25,11 @@ def test_save_and_match_resume_library():
         lib = ResumeLibrary(tmp)
         saved = lib.save_resume("Backend Go Vault", tex, pdf, "Go Kubernetes Vault REST")
         assert saved.slug == "backend-go-vault"
+        assert "Go" in saved.keywords
         matches = lib.match("Go Kubernetes Redis REST")
         assert matches[0].name == "Backend Go Vault"
         assert matches[0].score > 0
         assert "Go" in matches[0].matched
         assert "Redis" in matches[0].missing
+        lib.delete_resume(saved.id)
+        assert lib.list_resumes() == []

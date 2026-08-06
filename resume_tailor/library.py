@@ -8,6 +8,8 @@ from pathlib import Path
 
 from .keywords import extract_terms, flatten
 
+IMPORTANT = ["AI", "LLM", "MCP", "HashiCorp Vault", "Kubernetes", "AWS", "Go", "TypeScript", "React", "Python", "PostgreSQL", "Docker", "CI/CD", "REST"]
+
 
 @dataclass(frozen=True)
 class SavedResume:
@@ -15,6 +17,8 @@ class SavedResume:
     name: str
     slug: str
     pdf_path: str
+    created_at: str = ""
+    keywords: tuple[str, ...] = ()
     score: float = 0.0
     matched: tuple[str, ...] = ()
     missing: tuple[str, ...] = ()
@@ -25,6 +29,14 @@ def slugify(name: str) -> str:
     while "--" in slug:
         slug = slug.replace("--", "-")
     return slug or "resume"
+
+
+def suggested_name(job_text: str, tex_text: str = "") -> str:
+    terms = flatten(extract_terms(job_text + "\n" + tex_text))
+    picked = [term for term in IMPORTANT if term in terms][:4]
+    if not picked:
+        picked = sorted(terms)[:3]
+    return slugify(" ".join(picked) or "general-swe")
 
 
 class ResumeLibrary:
@@ -75,6 +87,8 @@ class ResumeLibrary:
             )
 
     def save_resume(self, name: str, tex: Path, pdf: Path, job_text: str = "", notes: str = "") -> SavedResume:
+        tex_text = tex.read_text()
+        name = name.strip() or suggested_name(job_text, tex_text)
         base = slugify(name)
         slug = base
         n = 2
@@ -94,17 +108,38 @@ class ResumeLibrary:
                 (name, slug, str(tex_dest), str(pdf_dest), notes, created_at),
             )
             resume_id = int(cur.lastrowid)
-            keywords = sorted(flatten(extract_terms(tex_dest.read_text() + "\n" + job_text)))
+            keywords = sorted(flatten(extract_terms(tex_text + "\n" + job_text)))
             conn.executemany(
                 "insert or ignore into resume_keywords(resume_id, keyword) values (?, ?)",
                 [(resume_id, k) for k in keywords],
             )
-        return SavedResume(resume_id, name, slug, str(pdf_dest))
+        return SavedResume(resume_id, name, slug, str(pdf_dest), created_at, tuple(keywords))
 
     def list_resumes(self) -> list[SavedResume]:
         with self.connect() as conn:
-            rows = conn.execute("select id, name, slug, pdf_path from resumes order by created_at desc").fetchall()
-        return [SavedResume(row["id"], row["name"], row["slug"], row["pdf_path"]) for row in rows]
+            rows = conn.execute(
+                """
+                select r.id, r.name, r.slug, r.pdf_path, r.created_at, group_concat(k.keyword) as keywords
+                from resumes r
+                left join resume_keywords k on k.resume_id = r.id
+                group by r.id
+                order by r.created_at desc
+                """
+            ).fetchall()
+        return [
+            SavedResume(row["id"], row["name"], row["slug"], row["pdf_path"], row["created_at"], tuple(sorted(set((row["keywords"] or "").split(",")) - {""})))
+            for row in rows
+        ]
+
+    def delete_resume(self, resume_id: int) -> None:
+        with self.connect() as conn:
+            row = conn.execute("select slug from resumes where id = ?", (resume_id,)).fetchone()
+            if not row:
+                return
+            conn.execute("delete from resume_keywords where resume_id = ?", (resume_id,))
+            conn.execute("delete from matches where resume_id = ?", (resume_id,))
+            conn.execute("delete from resumes where id = ?", (resume_id,))
+        shutil.rmtree(self.resumes / row["slug"], ignore_errors=True)
 
     def match(self, job_text: str, limit: int = 5) -> list[SavedResume]:
         job_keywords = flatten(extract_terms(job_text))
@@ -133,5 +168,5 @@ class ResumeLibrary:
                     "insert or replace into matches(job_id, resume_id, score) values (?, ?, ?)",
                     (job_id, row["id"], score),
                 )
-                scored.append(SavedResume(row["id"], row["name"], row["slug"], row["pdf_path"], score, matched, missing))
+                scored.append(SavedResume(row["id"], row["name"], row["slug"], row["pdf_path"], keywords=tuple(sorted(resume_keywords)), score=score, matched=matched, missing=missing))
         return sorted(scored, key=lambda r: r.score, reverse=True)[:limit]

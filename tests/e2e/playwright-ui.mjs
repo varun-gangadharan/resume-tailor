@@ -27,5 +27,11 @@ text = await page.locator('body').innerText();
 if (!text.includes(name)) throw new Error('saved resume missing from matches');
 if (!text.includes('Generate New PDF Instead')) throw new Error('fallback generate action missing');
 
+await page.goto(`${base}/library`, { waitUntil: 'domcontentloaded' });
+await page.locator('tr', { hasText: name }).getByRole('button', { name: 'Delete' }).click();
+await page.getByText('Deleted resume.').waitFor();
+text = await page.locator('body').innerText();
+if (text.includes(name)) throw new Error('test resume cleanup failed');
+
 console.log('playwright ui library smoke: ok');
 await browser.close();

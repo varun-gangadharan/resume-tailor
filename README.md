@@ -68,7 +68,7 @@ Then paste a JD in the browser and either:
 - click `Find Existing Resume` to search your saved local library
 - click `Generate New PDF` to tailor a new one
 
-Generated resumes can be saved to the library with a name like `backend-go-vault`.
+Generated resumes get an editable suggested name like `kubernetes-aws-go-typescript`, then save into the library with keywords, date, PDF link, and delete action. The folder slug is shown only as a storage ID.
 
 ## Clickable Mac app
 
